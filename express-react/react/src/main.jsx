@@ -1,8 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 
+
 import Home from './components/pages/Home'
 import NewPost from './components/pages/NewPost'
+import ImageEditorMain from './components/compress/ImageEditorMain.jsx';
 
 import Layout from './Layout'
 
@@ -24,6 +26,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <Route path="/" element={<Layout />}>
         <Route index element={<Home />} />
         <Route path="newPost" element={<NewPost />} />
+        <Route path="/editImage" element={<ImageEditorMain />} />
       </Route>
     </Routes>
   </BrowserRouter>

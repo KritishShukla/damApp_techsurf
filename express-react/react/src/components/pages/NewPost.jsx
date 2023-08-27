@@ -16,6 +16,10 @@ export default function NewPost() {
     const formData = new FormData();
     formData.append("image", file)
     formData.append("caption", caption)
+    console.log("FormData:", formData);
+          for (let pair of formData.entries()) {
+            console.log(pair[0] + ": " + pair[1]);
+          }
     try {
       await axios.post("/api/posts", formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
@@ -29,6 +33,7 @@ export default function NewPost() {
   const fileSelected = event => {
     const file = event.target.files[0]
 		setFile(file)
+    console.log("Selected File :", file);
 	}
 
   return (

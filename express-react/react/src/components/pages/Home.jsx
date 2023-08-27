@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 
 import SinglePost from '../SinglePost'
-
+import ImageEditorMain from '../compress/ImageEditorMain.jsx';
 import { useNavigate } from 'react-router-dom'
 
 
@@ -34,12 +34,18 @@ function App() {
     await axios.delete("/api/posts/" + _id)
     setPosts(posts.filter(post => post._id !== _id))
   }
+  const editImageClicked = ({_id,imageName}) =>{
+    console.log(" EditIamge ",imageName)
+    navigate(`/editImage?imageName=${imageName}&postId=${_id}`);
+   
+  }
 
   const postActions = {
     likeClicked,
     commentClicked,
     editPostClicked,
-    deletePostClicked
+    deletePostClicked,
+    editImageClicked
   }
 
 

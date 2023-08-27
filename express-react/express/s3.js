@@ -13,6 +13,7 @@ const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY
 console.log("Region:", region);  
 const s3Client = new S3Client({
   region : region,
+  signatureVersion: 'v4',
   credentials: {
     accessKeyId,
     secretAccessKey

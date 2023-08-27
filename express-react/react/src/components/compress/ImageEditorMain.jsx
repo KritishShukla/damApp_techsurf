@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import "./style/main.scss";
+import React, { useState,useEffect  } from "react";
+import "./main.scss";
 import ReactCrop from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 import { GrRotateLeft, GrRotateRight } from "react-icons/gr";
@@ -7,7 +7,56 @@ import { CgMergeVertical, CgMergeHorizontal } from "react-icons/cg";
 import { IoMdUndo, IoMdRedo, IoIosImage } from "react-icons/io";
 import storeData from "./linked";
 import Navbar from "../navbar/navbar";
-const Main = () => {
+import Compressor from "compressorjs";
+import { useLocation } from "react-router-dom";
+import axios from "axios";
+
+
+
+var  imageUrlll=""
+var  blobOrFile=""
+const ImageEditorMain = () => {
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const imageName = queryParams.get('imageName');
+  const imageId=queryParams.get('_id');
+  const [imageResponse, setImageResponse] = useState(null); // Store the API response
+  const [triggerImageHandle, setTriggerImageHandle] = useState(false);
+
+  useEffect(() => {
+    if (triggerImageHandle) {
+      imageHandle(null, imageResponse);
+      setTriggerImageHandle(false); // Reset the trigger state
+    }
+  }, [triggerImageHandle, imageResponse]);
+
+  useEffect(() => {
+    if (imageName) {
+      console.log("ImageEditorMain ImageName :", imageName)
+      async function fetchData() {
+        try {
+          console.log("ImageEditorMain fetchIamgeName :",imageName)
+          const imageUrl = await axios.get(`/api/getObjectSignedUrl?imageName=${imageName}`);
+          console.log("ImageEditorMain ImageData :", imageUrl.data)
+          const responseBlob = await axios.get(imageUrl.data, { responseType: 'blob' });
+          setImageResponse(responseBlob.data);
+          console.log("ImageEditorMain ImageData :", responseBlob.data)
+          if(imageResponse != null){
+            imageUrlll=imageResponse
+          }
+          setTriggerImageHandle(true);   
+        } catch (error) {
+          console.error("Error fetching image:", error);
+        }
+      }
+
+      fetchData();
+      
+      // imageHandle(null,imageUrlll)
+    }
+  }, [imageName]);
+
+
   const filterElement = [
     {
       name: "brightness",
@@ -50,6 +99,8 @@ const Main = () => {
     rotate: 0,
     vartical: 1,
     horizental: 1,
+    compressionQuality: 0.8,
+    blob: null,
   });
   const inputHandle = (e) => {
     setState({
@@ -109,16 +160,19 @@ const Main = () => {
       setState(data);
     }
   };
-  const imageHandle = (e) => {
-    if (e.target.files.length !== 0) {
-      const reader = new FileReader();
 
+  const imageHandle = (e, imageBlob) => {
+    if (imageBlob || (e.target.files && e.target.files.length > 0)) {
+      const file = imageBlob || e.target.files[0];
+      const reader = new FileReader();
+  
       reader.onload = () => {
         setState({
           ...state,
           image: reader.result,
+          blob: file,
         });
-
+  
         const stateData = {
           image: reader.result,
           brightness: 100,
@@ -130,12 +184,16 @@ const Main = () => {
           rotate: 0,
           vartical: 1,
           horizental: 1,
+          blob: file,
         };
         storeData.insert(stateData);
       };
-      reader.readAsDataURL(e.target.files[0]);
+  
+      reader.readAsDataURL(file); // Read the file as a data URL
     }
   };
+  
+  
   const imageCrop = () => {
     const canvas = document.createElement("canvas");
     const scaleX = details.naturalWidth / details.width;
@@ -164,30 +222,94 @@ const Main = () => {
     });
   };
   const saveImage = () => {
-    const canvas = document.createElement("canvas");
-    canvas.width = details.naturalHeight;
-    canvas.height = details.naturalHeight;
-    const ctx = canvas.getContext("2d");
-
-    ctx.filter = `brightness(${state.brightness}%) brightness(${state.brightness}%) sepia(${state.sepia}%) saturate(${state.saturate}%) contrast(${state.contrast}%) grayscale(${state.grayscale}%) hue-rotate(${state.hueRotate}deg)`;
-
-    ctx.translate(canvas.width / 2, canvas.height / 2);
-    ctx.rotate((state.rotate * Math.PI) / 180);
-    ctx.scale(state.vartical, state.horizental);
-
-    ctx.drawImage(
-      details,
-      -canvas.width / 2,
-      -canvas.height / 2,
-      canvas.width,
-      canvas.height
-    );
-
-    const link = document.createElement("a");
-    link.download = "image_edit.jpg";
-    link.href = canvas.toDataURL();
-    link.click();
+    if (details && state.image) {
+      const canvas = document.createElement("canvas");
+      canvas.width = details.naturalWidth;
+      canvas.height = details.naturalHeight;
+      const ctx = canvas.getContext("2d");
+  
+      ctx.filter = `brightness(${state.brightness}%) brightness(${state.brightness}%) sepia(${state.sepia}%) saturate(${state.saturate}%) contrast(${state.contrast}%) grayscale(${state.grayscale}%) hue-rotate(${state.hueRotate}deg)`;
+  
+      ctx.translate(canvas.width / 2, canvas.height / 2);
+      ctx.rotate((state.rotate * Math.PI) / 180);
+      ctx.scale(state.vartical, state.horizental);
+  
+      ctx.drawImage(
+        details,
+        -canvas.width / 2,
+        -canvas.height / 2,
+        canvas.width,
+        canvas.height
+      );
+  
+    
+      const generateFileName = (bytes = 32) => crypto.randomBytes(bytes).toString('hex')
+      canvas.toBlob(async (blob) => {
+        if (blob) {
+          try {
+            const formData = new FormData();
+            formData.append("image", blob); 
+            formData.append("imageId", imageId);
+            const response = await axios.post("/api/upload-to-s3", formData,{
+              headers: { 'Content-Type': 'multipart/form-data' }
+            });
+            if (response.status === 200) {
+              // The edited image has been uploaded to S3, get the S3 image URL
+              const s3ImageUrl = response.data.s3ImageUrl;
+  
+              // Create a link element for download
+              const link = document.createElement("a");
+              link.download = "image_edit." + getFileExtension(state.image);
+              link.href = URL.createObjectURL(blob);
+              link.click();
+            } else {
+              console.error("Failed to upload image to S3");
+            }
+          } catch (error) {
+            console.error("Error uploading image to S3:", error);
+          }
+        }
+      }, "image/jpeg");
+    }
   };
+  
+  const getFileExtension = (dataUrl) => {
+    const mimeType = dataUrl.split(",")[0].split(":")[1].split(";")[0];
+    const extension = mimeType.split("/")[1];
+    return extension;
+  };
+  
+  
+ 
+  
+  
+
+  const compressImage = () => {
+    console.log(state.blob)
+    if (state.blob) {
+      console.log(state.blob)
+      new Compressor(state.blob, {
+        quality: state.compressionQuality, // Use the specified compression quality
+        maxWidth: 800, // Adjust maxWidth as needed
+        success(result) {
+          handleImageCompression(result);
+        },
+        error(err) {
+          console.error('Compression error:', err.message);
+        },
+      });
+    }
+  };
+  
+
+  const handleImageCompression = (compressedBlob) => {
+    const compressedImageUrl = URL.createObjectURL(compressedBlob);
+    setState({
+      ...state,
+      image: compressedImageUrl,
+    });
+  };
+
   return (
     <>
        <Navbar/>
@@ -246,11 +368,26 @@ const Main = () => {
               </div>
             </div>
             <div className="reset">
-              <button>Reset</button>
-              <button onClick={saveImage} className="save">
-                Save Image
+            <button>Reset</button>
+            <button onClick={saveImage} className="save">
+              Save Image
+            </button>
+            {/* Place the compression quality slider and span beside the "Compress Image" button */}
+            <div className="compression-options">
+              <button onClick={compressImage} className="compress">
+                Compress Image
               </button>
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.01" // Adjust the step value as needed
+                value={state.compressionQuality}
+                onChange={(e) => setState({ ...state, compressionQuality: parseFloat(e.target.value) })}
+              />
+              <span>Compression Quality: {state.compressionQuality}</span>
             </div>
+          </div>
           </div>
           <div className="image_section">
             <div className="image">
@@ -296,4 +433,4 @@ const Main = () => {
   );
 };
 
-export default Main;
+export default ImageEditorMain;

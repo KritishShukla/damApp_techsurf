@@ -1,9 +1,10 @@
 import { ChatIcon, UserIcon, TrashIcon, PencilIcon } from '@heroicons/react/solid'
 import { HeartIcon as HeartOutline } from '@heroicons/react/outline'
+import { useEffect, useState } from 'react'
 
-export default function SinglePost({ className, post, likeClicked, commentClicked, editClicked, deletePostClicked }) {
-  const { _id, caption, imageUrl, totalComments, totalLikes } = post
 
+export default function SinglePost({ className, post, likeClicked, commentClicked, editClicked, deletePostClicked,editImageClicked }) {
+  const { _id, caption, imageUrl, totalComments, totalLikes, imageName } = post
   return (
     <div className={className + ' outline-1'} style={{ width: 650 }}>
 
@@ -18,7 +19,7 @@ export default function SinglePost({ className, post, likeClicked, commentClicke
 
         <div className="flex flex-row items-end space-x-4 justify-center">
 
-          <img className="rounded" width="50" height="50" src={imageUrl} alt="Post" />
+          <img className="rounded" width="50" height="50" src={imageUrl}  alt="Post" />
 
           {/* Actions */}
           <div className='flex flex-row items-center space-x-4'>
@@ -30,11 +31,15 @@ export default function SinglePost({ className, post, likeClicked, commentClicke
               <ChatIcon className='cursor-pointer hover:text-gray-900 active:text-gray-700 h-8 w-8 text-gray-700' />
               <p>{totalComments}</p>
             </div>
-            <div className='flex flex-col items-center' onClick={() => editClicked({ _id })}>
-              <PencilIcon className='cursor-pointer hover:text-gray-900 active:text-gray-700 h-8 w-8 text-gray-700' />
-              <p>Edit</p>
-            </div>
-            <div className='flex flex-col items-center' onClick={() => deletePostClicked({ _id })}>
+           
+            <div className='flex flex-col items-center' onClick={() => {
+              editImageClicked({ _id,imageName: imageName }); 
+              }}>
+                <PencilIcon className='cursor-pointer hover:text-gray-900 active:text-gray-700 h-8 w-8 text-gray-700' />
+                <p>Edit</p>
+                </div>
+                
+              <div className='flex flex-col items-center' onClick={() => deletePostClicked({ _id })}>
               <TrashIcon className='cursor-pointer hover:text-gray-900 active:text-gray-700 h-8 w-8 text-gray-700' />
               <p>Delete</p>
             </div>
