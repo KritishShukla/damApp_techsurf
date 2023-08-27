@@ -250,7 +250,7 @@ const ImageEditorMain = () => {
             const formData = new FormData();
             formData.append("image", blob); 
             formData.append("imageId", imageId);
-            const response = await axios.post("/api/upload-to-s3", formData,{
+            const response = await axios.post("http://13.48.94.31:8080/api/upload-to-s3", formData,{
               headers: { 'Content-Type': 'multipart/form-data' }
             });
             if (response.status === 200) {

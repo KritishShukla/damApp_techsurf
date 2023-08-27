@@ -7,10 +7,13 @@ import { uploadFile, deleteFile, getObjectSignedUrl } from './s3.js'
 import dotenv from 'dotenv'
 import exiftoolBin from 'dist-exiftool';
 import exiftool from 'node-exiftool';
- import fs from 'fs';
+import cors from 'cors';
+
 dotenv.config()
 
 const app = express()
+
+app.use(cors());
 
 mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
@@ -29,6 +32,7 @@ app.use(express.json())
 
 const postSchema = new mongoose.Schema({
   caption: String,
+  title: String,
   imageName: String,
   created: Date,
   imageUrl: String
@@ -95,11 +99,13 @@ app.post('/api/posts', upload.single('image'), async (req, res) => {
     
     const file = req.file
     const caption = req.body.caption
+    const title = req.body.title;
     const imageName = req.file.originalname
     const imageUrl =await uploadFile(file.buffer, imageName, file.mimetype)
   
     const post = new Post({
       imageName,
+      title,
       caption,
       created: new Date(),
       imageUrl:imageUrl

@@ -13,7 +13,7 @@ function App() {
 
   useEffect(() => {
     async function getPosts() {
-      const result = await axios.get("/api/posts")
+      const result = await axios.get("http://13.48.94.31:8080/api/posts")
       setPosts(result.data)
     }
     getPosts()
@@ -31,7 +31,7 @@ function App() {
   }
   const deletePostClicked = async ({_id}) => {
     console.log(`deletePostClicked = (${_id})`)
-    await axios.delete("/api/posts/" + _id)
+    await axios.delete("http://13.48.94.31:8080/api/posts/" + _id)
     setPosts(posts.filter(post => post._id !== _id))
   }
   const editImageClicked = ({_id,imageName}) =>{

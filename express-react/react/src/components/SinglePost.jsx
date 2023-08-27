@@ -1,52 +1,40 @@
-import { ChatIcon, UserIcon, TrashIcon, PencilIcon } from '@heroicons/react/solid'
-import { HeartIcon as HeartOutline } from '@heroicons/react/outline'
-import { useEffect, useState } from 'react'
+import { TrashIcon, PencilIcon } from '@heroicons/react/solid';
+import { useEffect, useState } from 'react';
 
+export default function SinglePost({
+  className,
+  post,
+  likeClicked,
+  commentClicked,
+  editClicked,
+  deletePostClicked,
+  editImageClicked
+}) {
+  const { _id, caption, imageUrl, imageName } = post;
 
-export default function SinglePost({ className, post, likeClicked, commentClicked, editClicked, deletePostClicked,editImageClicked }) {
-  const { _id, caption, imageUrl, totalComments, totalLikes, imageName } = post
   return (
-    <div className={className + ' outline-1'} style={{ width: 650 }}>
+    <div className={`bg-white shadow-lg rounded-lg ${className}`} style={{ maxWidth: 400 }}>
+      <div className="p-4">
+        {/* Caption */}
+        <p className="text-base font-bold mt-2">{caption}</p>
 
-      <div className="flex flex-col space-y-2">
+        {/* Card containing image and buttons */}
+        <div className='flex flex-col items-center space-y-4 mt-4'>
+          <img className="rounded-lg" width="300" height="300" src={imageUrl} alt="Post" />
 
-        <div className="flex flex-row items-center space-x-4 cursor-pointer active:opacity-80">
-          <UserIcon className='cursor-pointer hover:text-gray-900 active:text-gray-700 h-10 w-10 text-gray-700' />
-          <p className="text-base hover:underline">username</p>
-        </div>
-
-        <p className="text-base">{caption}</p>
-
-        <div className="flex flex-row items-end space-x-4 justify-center">
-
-          <img className="rounded" width="50" height="50" src={imageUrl}  alt="Post" />
-
-          {/* Actions */}
+          {/* Edit and Delete buttons */}
           <div className='flex flex-row items-center space-x-4'>
-            <div className='flex flex-col items-center' onClick={() => likeClicked({ _id })}>
-              <HeartOutline className='cursor-pointer hover:text-gray-900 active:text-gray-700 h-8 w-8 text-gray-700' />
-              <p>{totalLikes}</p>
+            <div className='flex flex-col items-center' onClick={() => editImageClicked({ _id, imageName })}>
+              <PencilIcon className='cursor-pointer hover:text-gray-900 active:text-gray-700 h-6 w-6 text-gray-700' />
+              <p className="text-xs mt-1">Edit</p>
             </div>
-            <div className='flex flex-col items-center' onClick={() => commentClicked({ _id })}>
-              <ChatIcon className='cursor-pointer hover:text-gray-900 active:text-gray-700 h-8 w-8 text-gray-700' />
-              <p>{totalComments}</p>
-            </div>
-           
-            <div className='flex flex-col items-center' onClick={() => {
-              editImageClicked({ _id,imageName: imageName }); 
-              }}>
-                <PencilIcon className='cursor-pointer hover:text-gray-900 active:text-gray-700 h-8 w-8 text-gray-700' />
-                <p>Edit</p>
-                </div>
-                
-              <div className='flex flex-col items-center' onClick={() => deletePostClicked({ _id })}>
-              <TrashIcon className='cursor-pointer hover:text-gray-900 active:text-gray-700 h-8 w-8 text-gray-700' />
-              <p>Delete</p>
+            <div className='flex flex-col items-center' onClick={() => deletePostClicked({ _id })}>
+              <TrashIcon className='cursor-pointer hover:text-gray-900 active:text-gray-700 h-6 w-6 text-gray-700' />
+              <p className="text-xs mt-1">Delete</p>
             </div>
           </div>
         </div>
-
       </div>
     </div>
-  )
+  );
 }
