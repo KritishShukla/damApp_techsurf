@@ -4,10 +4,10 @@ This Full Stack project is a cutting-edge digital asset management (DAM) applica
 
 ## Introduction
 
-Managing digital assets such as images can be a challenging task, especially as the volume of content grows. The IntelligentImage Manager addresses this challenge by providing a user-friendly platform that combines image storage, modification, and intelligent tagging in one seamless experience.
+Managing digital assets such as images can be a challenging task, especially as the volume of content grows. The DAM App addresses this challenge by providing a user-friendly platform that combines image storage, modification, and intelligent tagging in one seamless experience.
 
 ## Features
-# damApp_techsurf
+
 - **Image Editing:** Crop, rotate, adjust colors, apply filters, and more within the built-in image editor.
 - **Efficient Compression:** Optimize image file sizes while maintaining quality.
 - **Format Conversion:** Convert images to different formats with ease.
@@ -32,7 +32,7 @@ To get started with the IntelligentImage Manager, follow these steps:
 1. **Clone the repository:**
 
 `git clone https://github.com/KritishShukla/damApp_techsurf.git`
-`cd damApp_techsurf`# damApp_techsurf
+`cd damApp_techsurf`
 `cd react`
 
 
@@ -49,7 +49,9 @@ To get started with the IntelligentImage Manager, follow these steps:
 4. **Access the App:**
 Open your web browser and go to `http://localhost:3000`.
 
-Access the application at: [[http://your-app-url.com](https://damapptechsurf.netlify.app/)]([http://your-app-url.com](https://damapptechsurf.netlify.app/))
+Access the application at: [https://damapptechsurf.netlify.app/](https://damapptechsurf.netlify.app/)
+
+
 
 ## Project Architecture
 
@@ -62,7 +64,7 @@ The frontend of the application is built using **React**, a popular JavaScript l
 - ### Backend: Node.js, Express
 
 The backend of the application is powered by **Node.js**, a versatile JavaScript runtime. **Express**, a minimal and flexible web application framework, handles the backend logic, including routing, authentication, and interaction with the frontend.
-# damApp_techsurf
+
 - ### Image Storage: Amazon S3
 
 IntelligentImage Manager leverages the power of **Amazon S3** (Simple Storage Service) to securely store user-uploaded images. Amazon S3 ensures high availability, scalability, and durability for image assets.
@@ -80,6 +82,23 @@ The AI tagging feature is powered by machine learning models deployed through cl
 Image processing tasks, including editing, compression, and format conversion, are accomplished using a combination of frontend libraries. These processes ensure that image modifications are performed efficiently and without loss of quality.
 
 ![Alt Text](url_to_your_image)
+
+## Project Demo
+
+![Alt Text](url_to_your_image)
+- **step 1**
+
+![Alt Text](url_to_your_image)
+- **step 2**
+
+![Alt Text](url_to_your_image)
+- **step 3**
+
+![Alt Text](url_to_your_image)
+- **step 4**
+
+![Alt Text](url_to_your_image)
+- **step 5**
 
 ## Future Perspectives
 
@@ -106,5 +125,6 @@ Image processing tasks, including editing, compression, and format conversion, a
 
 8. **Enhanced Image Editor UI and Additional Tools**
    Upgrade the image editor's user interface with a focus on ease of use and functionality. Introduce new editing tools, filters, and effects based on user feedback to provide a comprehensive editing experience.
+
 
 
