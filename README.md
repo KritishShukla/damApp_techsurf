@@ -49,7 +49,7 @@ To get started with the IntelligentImage Manager, follow these steps:
 4. **Access the App:**
 Open your web browser and go to `http://localhost:3000`.
 
-Access the application at: [http://your-app-url.com](http://your-app-url.com)
+Access the application at: [[http://your-app-url.com](https://damapptechsurf.netlify.app/)]([http://your-app-url.com](https://damapptechsurf.netlify.app/))
 
 ## Project Architecture
 
