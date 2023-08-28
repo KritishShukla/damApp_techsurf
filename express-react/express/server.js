@@ -8,7 +8,7 @@ import dotenv from 'dotenv'
 import exiftoolBin from 'dist-exiftool';
 import exiftool from 'node-exiftool';
 import cors from 'cors';
-
+import mongo  from 'mongodb';
 dotenv.config()
 
 const app = express()
@@ -35,7 +35,8 @@ const postSchema = new mongoose.Schema({
   title: String,
   imageName: String,
   created: Date,
-  imageUrl: String
+  imageUrl: String,
+  lastModified:String,
 });
 
 const Post = mongoose.model('Post', postSchema);
@@ -102,39 +103,16 @@ app.post('/api/posts', upload.single('image'), async (req, res) => {
     const title = req.body.title;
     const imageName = req.file.originalname
     const imageUrl =await uploadFile(file.buffer, imageName, file.mimetype)
-  
+   const date=new Date()
     const post = new Post({
       imageName,
       title,
       caption,
-      created: new Date(),
-      imageUrl:imageUrl
+      created:date ,
+      imageUrl:imageUrl,
+      lastModified:date
     });
     await post.save();
-
-    const ep = new exiftool.ExiftoolProcess(exiftoolBin);
-
-        // Read metadata from the uploaded buffer
-        try {
-            const rs = Buffer.from(req.file.buffer); // Convert the buffer to a readable stream
-            await ep.open();
-
-            const result = await ep.readMetadata(rs, ['-File:all']);
-            const metadata = new MetaDataModel({
-                fileName: req.file.originalname, // Use original name or any suitable value
-                originalName: req.file.originalname,
-                size: req.file.size,
-                information: result.data[0]
-            });
-
-            await metadata.save();
-            console.log("MetaDataTag", metadata);
-
-            await ep.close();
-        } catch (error) {
-            console.error('Error processing metadata:', error);
-            await ep.close();
-         }
    res.status(201).send(post)
   } catch (error) {
     console.error("Error creating post:", error)
@@ -164,20 +142,27 @@ app.post("/api/upload-to-s3", upload.single('image'),async (req, res) => {
     const file = req.file
     const imageId = req.body.imageId;
     const imageName = generateFileName()
-
-    const imageUrl =await uploadFile(file.buffer, imageName, file.mimetype)
-    const prevpost= await Post.findById(imageId)
-    console.log("previousPost",prevpost)
-    const caption= prevpost.caption
-    const post = new Post({
-      imageName,
-      caption,
-      created: new Date(),
-      imageUrl:imageUrl
-    });
-
-    await post.save();
-    res.status(200).json({ s3ImageUrl: imageUrl });
+    console.log("ImageId", imageId)
+    if (imageId.match(/^[0-9a-fA-F]{24}$/)){
+      var objectId= new mongo.ObjectId(imageId) 
+      const prevpost= await Post.findById(objectId)
+      console.log("previousPost",prevpost)
+      
+  
+      const newImageUrl =await uploadFile(file.buffer, imageName, file.mimetype)
+      console.log("newImageUrl", newImageUrl)
+      const post = new Post({
+        ...prevpost.toObject(),
+        imageName:imageName,
+        _id: new mongo.ObjectId(), 
+        imageUrl: newImageUrl,
+        lastModified: new Date(),
+      });
+      console.log("newData",post)
+      await post.save();
+      res.status(200).json({ s3ImageUrl: newImageUrl });
+    }
+   
   } catch (error) {
     console.error("Error uploading to S3:", error);
     res.status(500).send({ error: "Internal Server Error" });

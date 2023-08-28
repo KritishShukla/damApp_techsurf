@@ -19,10 +19,16 @@ const ImageEditorMain = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const imageName = queryParams.get('imageName');
-  const imageId=queryParams.get('_id');
+  const imageId=queryParams.get('id');
   const [imageResponse, setImageResponse] = useState(null); // Store the API response
   const [triggerImageHandle, setTriggerImageHandle] = useState(false);
-
+  
+  const [overlay, setOverlay] = useState({	
+    image: null,	
+    positionX: 0,	
+    positionY: 0,	
+  });
+  
   useEffect(() => {
     if (triggerImageHandle) {
       imageHandle(null, imageResponse);
@@ -36,7 +42,7 @@ const ImageEditorMain = () => {
       async function fetchData() {
         try {
           console.log("ImageEditorMain fetchIamgeName :",imageName)
-          const imageUrl = await axios.get(`/api/getObjectSignedUrl?imageName=${imageName}`);
+          const imageUrl = await axios.get(`http://13.48.94.31:8080/api/getObjectSignedUrl?imageName=${imageName}`);
           console.log("ImageEditorMain ImageData :", imageUrl.data)
           const responseBlob = await axios.get(imageUrl.data, { responseType: 'blob' });
           setImageResponse(responseBlob.data);
@@ -247,6 +253,7 @@ const ImageEditorMain = () => {
       canvas.toBlob(async (blob) => {
         if (blob) {
           try {
+            console.log("iamgeId inside", imageId)
             const formData = new FormData();
             formData.append("image", blob); 
             formData.append("imageId", imageId);
@@ -300,7 +307,7 @@ const ImageEditorMain = () => {
       });
     }
   };
-  
+
 
   const handleImageCompression = (compressedBlob) => {
     const compressedImageUrl = URL.createObjectURL(compressedBlob);
