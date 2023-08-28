@@ -85,20 +85,26 @@ Image processing tasks, including editing, compression, and format conversion, a
 
 ## Project Demo
 
-![Alt Text](https://ik.imagekit.io/kritish10/techs1.jpg?updatedAt=1693184170565)
+[![Video](https://img.youtube.com/vi/TiamK3bSncs/0.jpg)](https://youtu.be/TiamK3bSncs)
+
+
+![Alt Text](https://ik.imagekit.io/kritish10/td1.jpeg?updatedAt=1693206245895)
 - **step 1**
 
-![Alt Text](https://ik.imagekit.io/kritish10/techs2.jpg?updatedAt=1693184170581)
+![Alt Text](https://ik.imagekit.io/kritish10/td2.jpeg?updatedAt=1693206245166)
 - **step 2**
 
-![Alt Text](https://ik.imagekit.io/kritish10/techs3.jpg?updatedAt=1693184170579)
+![Alt Text](https://ik.imagekit.io/kritish10/td3.jpeg?updatedAt=1693206245231)
 - **step 3**
 
-![Alt Text](https://ik.imagekit.io/kritish10/techs4.jpg?updatedAt=1693184170553)
+![Alt Text](https://ik.imagekit.io/kritish10/td5.jpeg?updatedAt=1693206245190)
 - **step 4**
 
-![Alt Text](https://ik.imagekit.io/kritish10/techs5.jpg?updatedAt=1693184170568)
+![Alt Text](https://ik.imagekit.io/kritish10/td6.jpeg?updatedAt=1693206245361)
 - **step 5**
+
+![Alt Text](https://ik.imagekit.io/kritish10/td7.jpeg?updatedAt=1693206245311)
+- **step 6**
 
 ## Future Perspectives
 
@@ -125,6 +131,3 @@ Image processing tasks, including editing, compression, and format conversion, a
 
 8. **Enhanced Image Editor UI and Additional Tools**
    Upgrade the image editor's user interface with a focus on ease of use and functionality. Introduce new editing tools, filters, and effects based on user feedback to provide a comprehensive editing experience.
-
-
-
