@@ -33,8 +33,8 @@ To get started with the IntelligentImage Manager, follow these steps:
 
 `git clone https://github.com/KritishShukla/damApp_techsurf.git`
 `cd damApp_techsurf`
+`cd express-react`
 `cd react`
-
 
 2. **Install Dependencies:**
 
@@ -81,23 +81,23 @@ The AI tagging feature is powered by machine learning models deployed through cl
 
 Image processing tasks, including editing, compression, and format conversion, are accomplished using a combination of frontend libraries. These processes ensure that image modifications are performed efficiently and without loss of quality.
 
-![Alt Text](url_to_your_image)
+![Alt Text](https://ik.imagekit.io/kritish10/archi.jpg?updatedAt=1693185722521)
 
 ## Project Demo
 
-![Alt Text](url_to_your_image)
+![Alt Text](https://ik.imagekit.io/kritish10/techs1.jpg?updatedAt=1693184170565)
 - **step 1**
 
-![Alt Text](url_to_your_image)
+![Alt Text](https://ik.imagekit.io/kritish10/techs2.jpg?updatedAt=1693184170581)
 - **step 2**
 
-![Alt Text](url_to_your_image)
+![Alt Text](https://ik.imagekit.io/kritish10/techs3.jpg?updatedAt=1693184170579)
 - **step 3**
 
-![Alt Text](url_to_your_image)
+![Alt Text](https://ik.imagekit.io/kritish10/techs4.jpg?updatedAt=1693184170553)
 - **step 4**
 
-![Alt Text](url_to_your_image)
+![Alt Text](https://ik.imagekit.io/kritish10/techs5.jpg?updatedAt=1693184170568)
 - **step 5**
 
 ## Future Perspectives
